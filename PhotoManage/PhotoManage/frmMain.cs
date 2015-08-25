@@ -11,20 +11,21 @@ namespace PhotoManage
 {
     public partial class frmMain : Form
     {
-        private string m_rootDist = @"Z:\Share4VM_C\Temp";
+        private string finalDirectory = @"D:\DuoDuo\PictureAndVideos";
+        private string m_rootDisk = @"D:\DuoDuo\Temp";
         private string rootDisk
         {
             get
             {
-                if (string.IsNullOrEmpty(this.m_rootDist))
+                if (string.IsNullOrEmpty(this.m_rootDisk))
                 {
                     if (Path.IsPathRooted(this.txtDir.Text))
-                        this.m_rootDist = Path.Combine(Path.GetPathRoot(this.txtDir.Text), "DuoDuo");
+                        this.m_rootDisk = Path.Combine(Path.GetPathRoot(this.txtDir.Text), "DuoDuo");
                     else
-                        this.m_rootDist = @"Z:\";
+                        this.m_rootDisk = @"D:\DuoDuo\Temp";
                 }
 
-                return this.m_rootDist;
+                return this.m_rootDisk;
             }
         }
 
@@ -192,8 +193,8 @@ namespace PhotoManage
                             }
 
                             entVM.FileNameDate = dateStr;
-                            if (dateStr.CompareTo("20121001") > 0)
-                                listVedioM.Add(entVM);
+                            //if (dateStr.CompareTo("20121001") > 0)
+                            listVedioM.Add(entVM);
                         }
                     }
 
@@ -204,7 +205,7 @@ namespace PhotoManage
 
         private void frmMain_Load(object sender, EventArgs e)
         {
-            this.txtDir.Text = @"Z:\Share4VM_C\Temp";
+            this.txtDir.Text = @"D:\DuoDuo\Temp";
 
             //this.chkPic.Checked = false;
             //this.txtDir_KeyDown(this.txtDir, new KeyEventArgs(Keys.Enter));
@@ -236,20 +237,50 @@ namespace PhotoManage
                             }
                         }
 
+                        string finalDirWithYear = Path.Combine(this.finalDirectory, dateStr.Substring(0, 4));
+                        string ffnFinal = Path.Combine(finalDirWithYear, dateStr + currEnt.FileExt);
 
                         string destDir = Path.Combine(Path.Combine(this.rootDisk, @"Renamed"), dateStr.Substring(0, 4));
+                        string doubleCheckDir = Path.Combine(this.rootDisk, "DoubleCheck");
                         string backDir = Path.Combine(Path.Combine(this.rootDisk, @"Backup"), currEnt.ParentDir);
                         if (!Directory.Exists(destDir))
                             Directory.CreateDirectory(destDir);
+                        if (!Directory.Exists(doubleCheckDir))
+                            Directory.CreateDirectory(doubleCheckDir);
                         if (!Directory.Exists(backDir))
                             Directory.CreateDirectory(backDir);
 
-                        string destFileName = Path.Combine(destDir, dateStr + currEnt.FileExt);
-                        File.Copy(currEnt.FileFullName, destFileName, true);
-                        File.Copy(currEnt.FileFullName, Path.Combine(backDir, currEnt.FileName + currEnt.FileExt), true);
+                        string checkDestFileName = Path.Combine(destDir, dateStr + currEnt.FileExt);
+
+                        int begIndex = Directory.GetFiles(doubleCheckDir, dateStr + "*").Length;
+                        if (File.Exists(checkDestFileName) || File.Exists(ffnFinal) || begIndex > 0)
+                        {
+                            if (File.Exists(ffnFinal))
+                            {
+                                File.Move(ffnFinal, Path.Combine(doubleCheckDir, string.Format("{0}{1}", dateStr, currEnt.FileExt)));
+                            }
+
+                            string tmpFileName = Path.Combine(doubleCheckDir, string.Format("{0}_{1}{2}",
+                                    dateStr, ++begIndex, currEnt.FileExt));
+                            File.Copy(currEnt.FileFullName, tmpFileName);
+
+                            if (File.Exists(checkDestFileName))
+                            {
+                                tmpFileName = Path.Combine(doubleCheckDir, string.Format("{0}_{1}{2}",
+                                    dateStr, ++begIndex, currEnt.FileExt));
+                                File.Move(checkDestFileName, tmpFileName);
+                            }
+                        }
+                        else
+                        {
+                            File.Copy(currEnt.FileFullName, checkDestFileName, false);
+                        }
+
                         try
                         {
-                            if (File.Exists(destFileName))
+                            string bakFileFullName = Path.Combine(backDir, currEnt.FileName + currEnt.FileExt);
+                            File.Move(currEnt.FileFullName, bakFileFullName);
+                            if (File.Exists(currEnt.FileFullName) && File.Exists(bakFileFullName))
                                 File.Delete(currEnt.FileFullName);
                         }
                         catch (Exception ex)
@@ -297,7 +328,7 @@ namespace PhotoManage
 
         private void btnMove_Click(object sender, EventArgs e)
         {
-            string strDest = @"Z:\TEMP\tmp\xz";
+            string strDest = @"D:\DuoDuo\Temp\Temp\XperiaZ";
             string strSrc = this.txtDir.Text.Trim();
             if (Directory.Exists(strSrc))
             {
