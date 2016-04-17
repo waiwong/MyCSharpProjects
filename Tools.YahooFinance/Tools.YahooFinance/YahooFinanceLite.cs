@@ -41,21 +41,21 @@ namespace Tools.YahooFinance
                 {
                     try
                     {
-                        if (cnt == 0)
-                        {
-                            WebProxy proxy = new WebProxy("ITD1SG511S", 8085);
-                            proxy.BypassProxyOnLocal = true;
-                            proxy.UseDefaultCredentials = true;
-                            client.Proxy = proxy;
-                        }
-                        else if (cnt == 1)
-                        {
-                            client.Proxy = WebRequest.GetSystemWebProxy();
-                        }
-                        else if (cnt == 2)
-                        {
-                            client.Proxy = WebRequest.DefaultWebProxy;
-                        }
+                        //if (cnt == 0)
+                        //{
+                        //    WebProxy proxy = new WebProxy("ITD1SG511S", 8085);
+                        //    proxy.BypassProxyOnLocal = true;
+                        //    proxy.UseDefaultCredentials = true;
+                        //    client.Proxy = proxy;
+                        //}
+                        //else if (cnt == 1)
+                        //{
+                        //    client.Proxy = WebRequest.GetSystemWebProxy();
+                        //}
+                        //else if (cnt == 2)
+                        //{
+                        //    client.Proxy = WebRequest.DefaultWebProxy;
+                        //}
 
                         stockData = client.DownloadString(new Uri(url));
 
