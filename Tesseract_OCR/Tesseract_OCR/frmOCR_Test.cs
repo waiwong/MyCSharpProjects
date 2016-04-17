@@ -35,7 +35,7 @@ namespace Tesseract_OCR
             {
                 string testImagePath = this.txtFile.Text.Trim();
                 using (var engine = new TesseractEngine(@"./tessdata", "eng", EngineMode.Default))
-                {
+                {                    
                     using (var img = Pix.LoadFromFile(testImagePath))
                     {
                         System.Diagnostics.Debug.WriteLine("Process image");
@@ -91,7 +91,7 @@ namespace Tesseract_OCR
 
         private void frmOCR_Test_Load(object sender, EventArgs e)
         {
-            this.txtFile.Text = @"C:\MyGitRepository\MyCSharpProjects\Tesseract_OCR\Tesseract_OCR\phototest.tif";
+            this.txtFile.Text = @"C:\SVN\github\MyCSharpProjects\Tesseract_OCR\Tesseract_OCR\phototest.tif";
         }
     }
 }
