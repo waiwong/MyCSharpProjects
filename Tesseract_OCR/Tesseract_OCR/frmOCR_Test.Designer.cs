@@ -32,6 +32,7 @@
             this.btnOCR = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.txtFile = new System.Windows.Forms.TextBox();
+            this.btnResize = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // btnSelectFile
@@ -70,11 +71,22 @@
             this.txtFile.Size = new System.Drawing.Size(372, 20);
             this.txtFile.TabIndex = 2;
             // 
+            // btnResize
+            // 
+            this.btnResize.Location = new System.Drawing.Point(329, 41);
+            this.btnResize.Name = "btnResize";
+            this.btnResize.Size = new System.Drawing.Size(75, 23);
+            this.btnResize.TabIndex = 3;
+            this.btnResize.Text = "Resize";
+            this.btnResize.UseVisualStyleBackColor = true;
+            this.btnResize.Click += new System.EventHandler(this.btnResize_Click);
+            // 
             // frmOCR_Test
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(549, 261);
+            this.Controls.Add(this.btnResize);
             this.Controls.Add(this.txtFile);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.btnOCR);
@@ -93,6 +105,7 @@
         private System.Windows.Forms.Button btnOCR;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox txtFile;
+        private System.Windows.Forms.Button btnResize;
     }
 }
 

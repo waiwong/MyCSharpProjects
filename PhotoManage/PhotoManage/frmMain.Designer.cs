@@ -30,12 +30,13 @@
         {
             this.txtDir = new System.Windows.Forms.TextBox();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.btnBrowser = new System.Windows.Forms.Button();
             this.btnMove = new System.Windows.Forms.Button();
             this.chkPic = new System.Windows.Forms.CheckBox();
             this.btnSave = new System.Windows.Forms.Button();
             this.dgvResult = new System.Windows.Forms.DataGridView();
-            this.btnBrowser = new System.Windows.Forms.Button();
             this.fbdSrc = new System.Windows.Forms.FolderBrowserDialog();
+            this.ckbShowInfo = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -45,9 +46,9 @@
             // 
             // txtDir
             // 
-            this.txtDir.Location = new System.Drawing.Point(3, 11);
+            this.txtDir.Location = new System.Drawing.Point(3, 12);
             this.txtDir.Name = "txtDir";
-            this.txtDir.Size = new System.Drawing.Size(523, 21);
+            this.txtDir.Size = new System.Drawing.Size(523, 20);
             this.txtDir.TabIndex = 0;
             this.txtDir.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtDir_KeyDown);
             // 
@@ -60,6 +61,7 @@
             // 
             // splitContainer1.Panel1
             // 
+            this.splitContainer1.Panel1.Controls.Add(this.ckbShowInfo);
             this.splitContainer1.Panel1.Controls.Add(this.btnBrowser);
             this.splitContainer1.Panel1.Controls.Add(this.btnMove);
             this.splitContainer1.Panel1.Controls.Add(this.chkPic);
@@ -69,13 +71,23 @@
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.Controls.Add(this.dgvResult);
-            this.splitContainer1.Size = new System.Drawing.Size(845, 492);
-            this.splitContainer1.SplitterDistance = 42;
+            this.splitContainer1.Size = new System.Drawing.Size(1044, 533);
+            this.splitContainer1.SplitterDistance = 45;
             this.splitContainer1.TabIndex = 1;
+            // 
+            // btnBrowser
+            // 
+            this.btnBrowser.Location = new System.Drawing.Point(532, 10);
+            this.btnBrowser.Name = "btnBrowser";
+            this.btnBrowser.Size = new System.Drawing.Size(75, 23);
+            this.btnBrowser.TabIndex = 4;
+            this.btnBrowser.Text = "...";
+            this.btnBrowser.UseVisualStyleBackColor = true;
+            this.btnBrowser.Click += new System.EventHandler(this.btnBrowser_Click);
             // 
             // btnMove
             // 
-            this.btnMove.Location = new System.Drawing.Point(767, 9);
+            this.btnMove.Location = new System.Drawing.Point(767, 10);
             this.btnMove.Name = "btnMove";
             this.btnMove.Size = new System.Drawing.Size(75, 23);
             this.btnMove.TabIndex = 3;
@@ -89,18 +101,18 @@
             this.chkPic.AutoSize = true;
             this.chkPic.Checked = true;
             this.chkPic.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkPic.Location = new System.Drawing.Point(700, 13);
+            this.chkPic.Location = new System.Drawing.Point(700, 14);
             this.chkPic.Name = "chkPic";
-            this.chkPic.Size = new System.Drawing.Size(66, 16);
+            this.chkPic.Size = new System.Drawing.Size(58, 17);
             this.chkPic.TabIndex = 2;
             this.chkPic.Text = "picture";
             this.chkPic.UseVisualStyleBackColor = true;
             // 
             // btnSave
             // 
-            this.btnSave.Location = new System.Drawing.Point(618, 9);
+            this.btnSave.Location = new System.Drawing.Point(613, 10);
             this.btnSave.Name = "btnSave";
-            this.btnSave.Size = new System.Drawing.Size(75, 21);
+            this.btnSave.Size = new System.Drawing.Size(75, 23);
             this.btnSave.TabIndex = 1;
             this.btnSave.Text = "Save";
             this.btnSave.UseVisualStyleBackColor = true;
@@ -114,31 +126,31 @@
             this.dgvResult.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dgvResult.Location = new System.Drawing.Point(0, 0);
             this.dgvResult.Name = "dgvResult";
-            this.dgvResult.Size = new System.Drawing.Size(845, 446);
+            this.dgvResult.Size = new System.Drawing.Size(1044, 484);
             this.dgvResult.TabIndex = 0;
-            // 
-            // btnBrowser
-            // 
-            this.btnBrowser.Location = new System.Drawing.Point(533, 11);
-            this.btnBrowser.Name = "btnBrowser";
-            this.btnBrowser.Size = new System.Drawing.Size(75, 23);
-            this.btnBrowser.TabIndex = 4;
-            this.btnBrowser.Text = "...";
-            this.btnBrowser.UseVisualStyleBackColor = true;
-            this.btnBrowser.Click += new System.EventHandler(this.btnBrowser_Click);
             // 
             // fbdSrc
             // 
             this.fbdSrc.ShowNewFolderButton = false;
             // 
+            // ckbShowInfo
+            // 
+            this.ckbShowInfo.AutoSize = true;
+            this.ckbShowInfo.Location = new System.Drawing.Point(867, 14);
+            this.ckbShowInfo.Name = "ckbShowInfo";
+            this.ckbShowInfo.Size = new System.Drawing.Size(74, 17);
+            this.ckbShowInfo.TabIndex = 5;
+            this.ckbShowInfo.Text = "Show Info";
+            this.ckbShowInfo.UseVisualStyleBackColor = true;
+            // 
             // frmMain
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(845, 492);
+            this.ClientSize = new System.Drawing.Size(1044, 533);
             this.Controls.Add(this.splitContainer1);
             this.Name = "frmMain";
-            this.Text = "Form1";
+            this.Text = "Rename Photo";
             this.Load += new System.EventHandler(this.frmMain_Load);
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel1.PerformLayout();
@@ -160,6 +172,7 @@
         private System.Windows.Forms.Button btnMove;
         private System.Windows.Forms.Button btnBrowser;
         private System.Windows.Forms.FolderBrowserDialog fbdSrc;
+        private System.Windows.Forms.CheckBox ckbShowInfo;
     }
 }
 
