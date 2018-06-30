@@ -30,13 +30,14 @@
         {
             this.txtDir = new System.Windows.Forms.TextBox();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.ckbShowInfo = new System.Windows.Forms.CheckBox();
             this.btnBrowser = new System.Windows.Forms.Button();
             this.btnMove = new System.Windows.Forms.Button();
             this.chkPic = new System.Windows.Forms.CheckBox();
             this.btnSave = new System.Windows.Forms.Button();
             this.dgvResult = new System.Windows.Forms.DataGridView();
             this.fbdSrc = new System.Windows.Forms.FolderBrowserDialog();
-            this.ckbShowInfo = new System.Windows.Forms.CheckBox();
+            this.btnCheck = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -61,6 +62,7 @@
             // 
             // splitContainer1.Panel1
             // 
+            this.splitContainer1.Panel1.Controls.Add(this.btnCheck);
             this.splitContainer1.Panel1.Controls.Add(this.ckbShowInfo);
             this.splitContainer1.Panel1.Controls.Add(this.btnBrowser);
             this.splitContainer1.Panel1.Controls.Add(this.btnMove);
@@ -71,9 +73,19 @@
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.Controls.Add(this.dgvResult);
-            this.splitContainer1.Size = new System.Drawing.Size(1044, 533);
+            this.splitContainer1.Size = new System.Drawing.Size(1127, 533);
             this.splitContainer1.SplitterDistance = 45;
             this.splitContainer1.TabIndex = 1;
+            // 
+            // ckbShowInfo
+            // 
+            this.ckbShowInfo.AutoSize = true;
+            this.ckbShowInfo.Location = new System.Drawing.Point(867, 14);
+            this.ckbShowInfo.Name = "ckbShowInfo";
+            this.ckbShowInfo.Size = new System.Drawing.Size(74, 17);
+            this.ckbShowInfo.TabIndex = 5;
+            this.ckbShowInfo.Text = "Show Info";
+            this.ckbShowInfo.UseVisualStyleBackColor = true;
             // 
             // btnBrowser
             // 
@@ -126,28 +138,28 @@
             this.dgvResult.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dgvResult.Location = new System.Drawing.Point(0, 0);
             this.dgvResult.Name = "dgvResult";
-            this.dgvResult.Size = new System.Drawing.Size(1044, 484);
+            this.dgvResult.Size = new System.Drawing.Size(1127, 484);
             this.dgvResult.TabIndex = 0;
             // 
             // fbdSrc
             // 
             this.fbdSrc.ShowNewFolderButton = false;
             // 
-            // ckbShowInfo
+            // btnCheck
             // 
-            this.ckbShowInfo.AutoSize = true;
-            this.ckbShowInfo.Location = new System.Drawing.Point(867, 14);
-            this.ckbShowInfo.Name = "ckbShowInfo";
-            this.ckbShowInfo.Size = new System.Drawing.Size(74, 17);
-            this.ckbShowInfo.TabIndex = 5;
-            this.ckbShowInfo.Text = "Show Info";
-            this.ckbShowInfo.UseVisualStyleBackColor = true;
+            this.btnCheck.Location = new System.Drawing.Point(948, 12);
+            this.btnCheck.Name = "btnCheck";
+            this.btnCheck.Size = new System.Drawing.Size(107, 23);
+            this.btnCheck.TabIndex = 6;
+            this.btnCheck.Text = "CheckDuplicate";
+            this.btnCheck.UseVisualStyleBackColor = true;
+            this.btnCheck.Click += new System.EventHandler(this.btnCheck_Click);
             // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1044, 533);
+            this.ClientSize = new System.Drawing.Size(1127, 533);
             this.Controls.Add(this.splitContainer1);
             this.Name = "frmMain";
             this.Text = "Rename Photo";
@@ -173,6 +185,7 @@
         private System.Windows.Forms.Button btnBrowser;
         private System.Windows.Forms.FolderBrowserDialog fbdSrc;
         private System.Windows.Forms.CheckBox ckbShowInfo;
+        private System.Windows.Forms.Button btnCheck;
     }
 }
 
