@@ -242,7 +242,7 @@ namespace PhotoManage.MethodTwo
             }
         }
         //
-        private System.Drawing.Bitmap bmp;
+        //private System.Drawing.Bitmap bmp;
         //
         private string data;
         //

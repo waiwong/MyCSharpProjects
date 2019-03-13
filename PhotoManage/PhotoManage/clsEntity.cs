@@ -42,21 +42,25 @@ namespace PhotoManage
             {
                 this.mTakeTime = value;
                 string dateStr = this.TakeTime.Trim(new char[] { '\0' }).Replace(" ", "").Replace(":", "");
-                if (this.FileName.Replace("IMG_", "").Replace("_", "").StartsWith(dateStr.Substring(0, 11)))
+                if (!string.IsNullOrEmpty(dateStr))
                 {
-                    dateStr = this.FileName.Replace("IMG_", "").Replace("(", "_").Replace(")", "").Replace("_bestshot", "").Replace("_HDR", "").Replace("DSC_", "").Replace("_LLS", "");
-                    if (dateStr.Substring(8, 1).Equals("_"))
+                    if (this.FileName.Replace("IMG_", "").Replace("_", "").StartsWith(dateStr.Substring(0, 11)))
                     {
-                        dateStr = dateStr.Substring(0, 8) + dateStr.Substring(9);
+                        dateStr = this.FileName.Replace("IMG_", "").Replace("(", "_").Replace(")", "").Replace("_bestshot", "").Replace("_HDR", "").Replace("DSC_", "").Replace("_LLS", "");
+                        if (dateStr.Substring(8, 1).Equals("_"))
+                        {
+                            dateStr = dateStr.Substring(0, 8) + dateStr.Substring(9);
+                        }
+
+                        if (dateStr.Length > 14)
+                        {
+                            if (string.IsNullOrEmpty(this.EquipModel) || !this.EquipModel.Equals("SCH-N719"))
+                                dateStr = dateStr.Substring(0, 14);
+                        }
                     }
 
-                    if (dateStr.Length > 14)
-                    {
-                        if (string.IsNullOrEmpty(this.EquipModel) || !this.EquipModel.Equals("SCH-N719"))
-                            dateStr = dateStr.Substring(0, 14);
-                    }
+                    this.mFileName = dateStr;
                 }
-                this.mFileName = dateStr;
             }
         }
 

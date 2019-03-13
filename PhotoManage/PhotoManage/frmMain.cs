@@ -13,8 +13,8 @@ namespace PhotoManage
 {
     public partial class frmMain : Form
     {
-        private string finalDirectory = @"D:\DuoDuo\PictureAndVideos";
-        private string m_rootDisk = @"D:\DuoDuo\Temp";
+        private string finalDirectory = @"E:\Duoduo\PictureAndVideos";
+        private string m_rootDisk = @"E:\Duoduo\Temp";
         private string rootDisk
         {
             get
@@ -24,7 +24,7 @@ namespace PhotoManage
                     if (Path.IsPathRooted(this.txtDir.Text))
                         this.m_rootDisk = Path.Combine(Path.GetPathRoot(this.txtDir.Text), "DuoDuo");
                     else
-                        this.m_rootDisk = @"D:\DuoDuo\Temp";
+                        this.m_rootDisk = @"E:\Duoduo\Temp";
                 }
 
                 return this.m_rootDisk;
@@ -58,6 +58,7 @@ namespace PhotoManage
                     //Dictionary<string, DateTime> dicFiles = new Dictionary<string, DateTime>();
                     listPicM.Clear();
                     string[] strFiles = Directory.GetFiles(strDir, "*.jp*g", SearchOption.AllDirectories);
+                    int cnt = 0;
                     foreach (string itemFile in strFiles)
                     {
                         if (!itemFile.Contains("/2008/") && !itemFile.Contains("/2009/")
@@ -79,8 +80,9 @@ namespace PhotoManage
                             }
                             else
                             {
+                                cnt += lstPicM.Count;
                                 this.DoSavePic(lstPicM);
-                                System.Diagnostics.Debug.WriteLine(string.Format("process:{0}", lstPicM.Count));
+                                System.Diagnostics.Debug.WriteLine(string.Format("process:{0}", cnt));
                                 lstPicM.Clear();
                             }
                         }
@@ -152,7 +154,7 @@ namespace PhotoManage
 
         private void frmMain_Load(object sender, EventArgs e)
         {
-            this.txtDir.Text = @"D:\DuoDuo\Temp\Temp";
+            this.txtDir.Text = @"E:\Duoduo\Temp\Temp";
 
             //this.chkPic.Checked = false;
             //this.txtDir_KeyDown(this.txtDir, new KeyEventArgs(Keys.Enter));
@@ -302,6 +304,8 @@ namespace PhotoManage
 
         private void DoSavePic(List<EntPicM> lstPicM, bool checkDuplicate = false)
         {
+            if (lstPicM.Count == 0)
+                return;
             System.Diagnostics.Debug.WriteLine(lstPicM.FirstOrDefault().FileFullName);
             string strDir = Path.Combine(this.rootDisk, "Renamed");
             string strBackup = Path.Combine(this.rootDisk, "Backup");
@@ -343,47 +347,66 @@ namespace PhotoManage
                         //        continue;
                         //    }
                         //}
-                        EntPicM checkPM = new EntPicM();
-                        if (File.Exists(ffnDoubleCheck))
-                            checkPM = this.Init_fr_file(ffnDoubleCheck);
-                        else if (File.Exists(ffnFinal))
-                            checkPM = this.Init_fr_file(ffnFinal);
-                        else if (File.Exists(ffnRename))
-                            checkPM = this.Init_fr_file(ffnRename);
+                        List<EntPicM> lstCheckPM = new List<EntPicM>();
+                        //Directory.GetFiles(doubleCheckDir, currEnt.FileName + "*").Select(ff => this.Init_fr_file(ff)).ToList<EntPicM>();
+                        lstCheckPM.AddRange(Directory.GetFiles(doubleCheckDir, currEnt.FileName + "*").Select(ff => this.Init_fr_file(ff)));
+                        lstCheckPM.AddRange(Directory.GetFiles(strBackup, currEnt.FileName + "*").Select(ff => this.Init_fr_file(ff)));
+                        //if (File.Exists(ffnDoubleCheck))
+                        //    lstCheckPM.Add(this.Init_fr_file(ffnDoubleCheck));
+                        if (File.Exists(ffnFinal))
+                            lstCheckPM.Add(this.Init_fr_file(ffnFinal));
+                        if (File.Exists(ffnRename))
+                            lstCheckPM.Add(this.Init_fr_file(ffnRename));
 
-                        if (checkPM.Equals(currEnt))
+                        bool withSameItem = false;
+
+                        string backupName = Path.Combine(strBackup, currEnt.FileName + currEnt.FileExt);
+                        foreach (var checkPM in lstCheckPM)
                         {
-                            string backupName = Path.Combine(strBackup, currEnt.FileName + currEnt.FileExt);
-                            if (File.Exists(backupName))
+                            if (checkPM.Equals(currEnt))
                             {
-                                System.Diagnostics.Debug.WriteLine("delete:" + currEnt.FileFullName);
-                                File.Delete(currEnt.FileFullName);
-                            }
-                            else
-                            {
-                                int i = 0;
-                                while (File.Exists(backupName))
-                                {
-                                    i++;
-                                    backupName = Path.Combine(strBackup, string.Format("{0}_{1}{2}", currEnt.FileName, i, currEnt.FileExt));
-                                }
+                                bool existBackupOrDuplicate = File.Exists(backupName);
+                                if (!existBackupOrDuplicate)
+                                    existBackupOrDuplicate = Directory.GetFiles(doubleCheckDir, currEnt.FileName + "*").Length > 1;
 
-                                System.Diagnostics.Debug.WriteLine("Move:" + currEnt.FileFullName);
-                                File.Move(currEnt.FileFullName, backupName);
+                                if (existBackupOrDuplicate)
+                                {
+                                    System.Diagnostics.Debug.WriteLine("delete:" + currEnt.FileFullName);
+                                    File.Delete(currEnt.FileFullName);
+                                    withSameItem = true;
+                                    break;
+                                }
                             }
                         }
-                        else if (!checkDuplicate)
+
+                        if (!withSameItem && File.Exists(currEnt.FileFullName))
+                        {
+                            int i = 0;
+                            while (File.Exists(backupName))
+                            {
+                                i++;
+                                backupName = Path.Combine(strBackup, string.Format("{0}_{1}{2}", currEnt.FileName, i, currEnt.FileExt));
+                            }
+
+                            //System.Diagnostics.Debug.WriteLine(string.Format("Move: {0} to {1}", currEnt.FileFullName, backupName));
+                            File.Move(currEnt.FileFullName, backupName);
+                        }
+
+                        if (!checkDuplicate && !withSameItem)
                         {
                             int begIndex = Directory.GetFiles(doubleCheckDir, currEnt.FileName + "*").Length;
                             List<string> lstMoveFile = new List<string>();
                             //move the final file to double check dir
                             if (File.Exists(ffnFinal))
                                 lstMoveFile.Add(ffnFinal);
+                            if (File.Exists(backupName))
+                                lstMoveFile.Add(backupName);
                             //move the rename file to double check dir
                             if (File.Exists(ffnRename))
                                 lstMoveFile.Add(ffnRename);
                             //move current file double check dir
-                            lstMoveFile.Add(currEnt.FileFullName);
+                            if (File.Exists(currEnt.FileFullName))
+                                lstMoveFile.Add(currEnt.FileFullName);
 
                             foreach (var itmMoveFile in lstMoveFile)
                             {
@@ -403,6 +426,8 @@ namespace PhotoManage
 
         private void DoSaveVideo(List<EntVedioM> lstVedioM, bool checkDuplicate = false)
         {
+            if (lstVedioM.Count == 0)
+                return;
             System.Diagnostics.Debug.WriteLine(lstVedioM.FirstOrDefault().FileFullName);
             string strDir = Path.Combine(this.rootDisk, @"Video\Renamed");
             string strBackup = Path.Combine(this.rootDisk, @"Video\Backup");
@@ -461,7 +486,7 @@ namespace PhotoManage
                                     backupName = Path.Combine(strBackup, string.Format("{0}_{1}{2}", currEnt.FileNameDate, i, currEnt.FileExt));
                                 }
 
-                                System.Diagnostics.Debug.WriteLine("Move:" + currEnt.FileFullName);
+                                System.Diagnostics.Debug.WriteLine(string.Format("Move: {0} to {1}", currEnt.FileFullName, backupName));
                                 File.Move(currEnt.FileFullName, backupName);
                             }
                         }
@@ -541,8 +566,17 @@ namespace PhotoManage
             List<EntPicM> lstPicM = new List<EntPicM>();
             List<EntVedioM> lstVedioM = new List<EntVedioM>();
 
-            string[] strFiles = Directory.GetFiles(strCheckDir, "*.*", SearchOption.AllDirectories);
-            foreach (string itemFile in strFiles)
+            List<string> lstFiles = new List<string>();
+            lstFiles.AddRange(Directory.GetFiles(strCheckDir, "*.*", SearchOption.AllDirectories));
+            //for temp debug
+            //lstFiles.AddRange(Directory.GetFiles(Path.Combine(strCheckDir, "mi"), "*.*", SearchOption.AllDirectories));
+            //lstFiles.AddRange(Directory.GetFiles(Path.Combine(strCheckDir, "mi note"), "*.*", SearchOption.AllDirectories));
+            //lstFiles.AddRange(Directory.GetFiles(Path.Combine(strCheckDir, "嫲嫲"), "*.*", SearchOption.AllDirectories));
+
+            //string[] strFiles = Directory.GetFiles(strCheckDir, "*.*", SearchOption.AllDirectories);
+            int cntPic = 0;
+            int cntVedio = 0;
+            foreach (string itemFile in lstFiles)
             {
                 if (itemFile.ToUpper().Contains(".JPG") || itemFile.ToUpper().Contains(".PNG"))
                 {
@@ -551,8 +585,9 @@ namespace PhotoManage
 
                     if (lstPicM.Count > 100)
                     {
+                        cntPic += lstPicM.Count;
                         this.DoSavePic(lstPicM, true);
-                        System.Diagnostics.Debug.WriteLine(string.Format("process picture:{0}", lstPicM.Count));
+                        System.Diagnostics.Debug.WriteLine(string.Format("process picture:{0}", cntPic));
                         lstPicM.Clear();
                     }
                 }
@@ -563,8 +598,9 @@ namespace PhotoManage
 
                     if (lstVedioM.Count > 100)
                     {
+                        cntVedio += lstVedioM.Count;
                         this.DoSaveVideo(lstVedioM, true);
-                        System.Diagnostics.Debug.WriteLine(string.Format("process vedio:{0}", lstVedioM.Count));
+                        System.Diagnostics.Debug.WriteLine(string.Format("process vedio:{0}", cntVedio));
                         lstVedioM.Clear();
                     }
                 }
@@ -572,6 +608,45 @@ namespace PhotoManage
 
             this.DoSavePic(lstPicM, true);
             this.DoSaveVideo(lstVedioM, true);
+            MessageBox.Show("OK");
+        }
+
+        private void btnTempAction_Click(object sender, EventArgs e)
+        {
+            string strCheckDir = this.txtDir.Text.Trim();
+            if (!Directory.Exists(strCheckDir))
+            {
+                MessageBox.Show("Check Dir not exist:" + strCheckDir);
+                return;
+            }
+
+            string strDest = @"E:\photo\嫲嫲\renamed";
+            List<string> lstFiles = new List<string>();
+            int cntPic = 0;
+            lstFiles.AddRange(Directory.GetFiles(strCheckDir, "*.*", SearchOption.AllDirectories));
+            foreach (string itemFile in lstFiles)
+            {
+                if (itemFile.ToUpper().Contains(".JPG") || itemFile.ToUpper().Contains(".PNG"))
+                {
+                    EntPicM entPM = this.Init_fr_file(itemFile);
+                    if (entPM.EquipModel == "MI NOTE Pro" || entPM.EquipModel == "SCH-N719" || entPM.EquipModel == "OPPO R11")
+                    {
+                        cntPic++;
+                        FileInfo fi = new FileInfo(itemFile);
+                        string dirName = fi.Directory.Name;
+                        string subFolder = Path.Combine(strDest, entPM.EquipModel);
+                        if (!Directory.Exists(subFolder))
+                            Directory.CreateDirectory(subFolder);
+                        string destName = Path.Combine(subFolder, fi.Name);
+                        File.Move(itemFile, destName);
+
+                        if (cntPic % 100 == 0)
+                            System.Diagnostics.Debug.WriteLine(string.Format("process picture:{0}", cntPic));
+                    }
+
+                }
+            }
+
             MessageBox.Show("OK");
         }
     }
