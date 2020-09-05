@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.1209
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CheckPDFSharp", "CheckPDFSharp\CheckPDFSharp.csproj", "{AC0D55B8-F946-4355-9A3F-9DDE8F16341C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AC0D55B8-F946-4355-9A3F-9DDE8F16341C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AC0D55B8-F946-4355-9A3F-9DDE8F16341C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AC0D55B8-F946-4355-9A3F-9DDE8F16341C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AC0D55B8-F946-4355-9A3F-9DDE8F16341C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {BD8E3E5A-9428-47EB-9E48-6D5A62D0B47D}
+	EndGlobalSection
+EndGlobal
